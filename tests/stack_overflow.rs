@@ -25,11 +25,6 @@ fn stack_overflow() {
     volatile::Volatile::new(0).read();
 }
 
-#[panic_handler]
-fn panic(info: &PanicInfo) -> ! {
-    rust_os_shakyo::test_panic_handler(info);
-}
-
 lazy_static! {
     static ref TEST_IDT: InterruptDescriptorTable = {
         let mut idt = InterruptDescriptorTable::new();
@@ -54,4 +49,9 @@ extern "x86-interrupt" fn test_double_fault_handler(
     serial_println!("[ok]");
     exit_qemu(QemuExitCode::Success);
     loop {}
+}
+
+#[panic_handler]
+fn panic(info: &PanicInfo) -> ! {
+    rust_os_shakyo::test_panic_handler(info);
 }

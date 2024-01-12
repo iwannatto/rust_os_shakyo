@@ -4,6 +4,7 @@
 #![test_runner(rust_os_shakyo::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
+use rust_os_shakyo::println;
 use core::panic::PanicInfo;
 
 #[no_mangle]
@@ -17,8 +18,6 @@ pub extern "C" fn _start() -> ! {
 fn panic(info: &PanicInfo) -> ! {
     rust_os_shakyo::test_panic_handler(info);
 }
-
-use rust_os_shakyo::println;
 
 #[test_case]
 fn test_println() {
