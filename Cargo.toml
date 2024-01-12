@@ -14,6 +14,9 @@ test-timeout = 300
 [[test]]
 name = "should_panic"
 harness = false
+[[test]]
+name = "stack_overflow"
+harness = false
 
 [dependencies]
 bootloader = "0.9.23"
