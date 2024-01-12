@@ -13,6 +13,21 @@ pub extern "C" fn _start() -> ! {
 
     rust_os_shakyo::init();
 
+    use core::fmt::Write;
+    use x86_64::instructions::interrupts;
+    use rust_os_shakyo::serial;
+    use rust_os_shakyo::vga_buffer;
+
+    let s = "Some test string that fits on a single line";
+    interrupts::without_interrupts(|| {
+        let mut writer = vga_buffer::WRITER.lock();
+        writeln!(writer, "\n{}", s).expect("writeln failed");
+        for (i, c) in s.chars().enumerate() {
+            let screen_char = vga_buffer::WRITER.lock().buffer.chars[vga_buffer::BUFFER_HEIGHT - 2][i].read();
+            assert_eq!(char::from(screen_char.ascii_character), c);
+        }
+    });
+
     #[cfg(test)]
     test_main();
 
