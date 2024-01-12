@@ -32,25 +32,25 @@ impl ColorCode {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 #[repr(C)]
-pub struct ScreenChar {
-    pub ascii_character: u8,
+struct ScreenChar {
+    ascii_character: u8,
     color_code: ColorCode,
 }
 
-pub const BUFFER_HEIGHT: usize = 25;
+const BUFFER_HEIGHT: usize = 25;
 const BUFFER_WIDTH: usize = 80;
 
 use volatile::Volatile;
 
 #[repr(transparent)]
-pub struct Buffer {
-    pub chars: [[Volatile<ScreenChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
+struct Buffer {
+    chars: [[Volatile<ScreenChar>; BUFFER_WIDTH]; BUFFER_HEIGHT],
 }
 
 pub struct Writer {
     column_position: usize,
     color_code: ColorCode,
-    pub buffer: &'static mut Buffer,
+    buffer: &'static mut Buffer,
 }
 
 impl Writer {
@@ -169,7 +169,7 @@ fn test_println_output() {
         let mut writer = WRITER.lock();
         writeln!(writer, "\n{}", s).expect("writeln failed");
         for (i, c) in s.chars().enumerate() {
-            let screen_char = WRITER.lock().buffer.chars[BUFFER_HEIGHT - 2][i].read();
+            let screen_char = writer.buffer.chars[BUFFER_HEIGHT - 2][i].read();
             assert_eq!(char::from(screen_char.ascii_character), c);
         }
     });
