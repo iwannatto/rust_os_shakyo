@@ -6,8 +6,6 @@ use x86_64::{
     },
     VirtAddr,
 };
-use bump::BumpAllocator;
-use crate::allocator::linked_list::LinkedListAllocator;
 use fixed_size_block::FixedSizeBlockAllocator;
 
 pub mod bump;
